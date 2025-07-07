@@ -87,18 +87,6 @@ jobs:
           path: 'source/_posts'
           retention-days: 90
 
-      # 新增图片部署步骤 - 部署到 posts 分支
-      - name: Deploy Images To Branch Posts
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          branch: posts
-          folder: ./source/_posts/img/
-          target-folder: img
-          force: true
-          git-config-name: "github-actions[bot]"
-          git-config-email: "github-actions[bot]@users.noreply.github.com"
-          commit-message: "Automated image deployment"
-
       - name: Deploy Markdown Posts To Branch Posts
         uses: JamesIves/github-pages-deploy-action@v4
         with:
