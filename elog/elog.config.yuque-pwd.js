@@ -14,7 +14,7 @@ module.exports = {
   deploy: {
     platform: "local",
     local: {
-      outputDir: "./source/_posts/语雀/",
+      outputDir: "./source/_posts/md/",
       filename: "title",
       format: "matter-markdown",
       catalog: true,
