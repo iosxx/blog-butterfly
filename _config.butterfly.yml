@@ -1259,7 +1259,7 @@ mourn:
 
 # AI 摘要
 ai_summary:
-  enable: true
+  enable: false
   postSelector: '#post #article-container'
   key: 'VCtoijR43E2uiVWkrZiC'
   postURL: "/^https?://[^/]+/posts/[^/]+/"
