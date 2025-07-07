@@ -27,7 +27,7 @@ module.exports = {
     platform: 'local',
     local: {
       outputDir: './source/_posts/img/',
-      prefixKey: 'https://jsd.cdn.zzko.cn/gh/iosxx/blog-butterfly@posts/img/',
+      prefixKey: 'https://jsd.onmicrosoft.cn/gh/iosxx/blog-butterfly@posts/img/',
     },
     oss: {
       secretId: process.env.OSS_SECRET_ID,
