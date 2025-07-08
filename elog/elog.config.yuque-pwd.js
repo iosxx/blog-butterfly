@@ -25,9 +25,10 @@ module.exports = {
     enable: true,
     platform: 'local',
     local: {
-      outputDir: './source/images/img',
-      prefixKey: 'https://fastly.jsdelivr.net/gh/xinkeji/hblog/images/yuque'
-    },
+      outputDir: './source/_posts/img',
+      prefixKey: 'https://cdn.jsdmirror.com/gh/iosxx/blog@posts/img',
+    }
+  },
     oss: {
       secretId: process.env.OSS_SECRET_ID,
       secretKey: process.env.OSS_SECRET_KEY,
