@@ -26,8 +26,8 @@ module.exports = {
     enable: true,
     platform: 'local',
     local: {
-      outputDir: './source/_posts/img/',
-      prefixKey: 'https://cdn.jsdmirror.com/gh/iosxx/blog@posts/img/',
+      outputDir: './source/_posts/img',
+      prefixKey: 'https://cdn.jsdmirror.com/gh/iosxx/blog@posts/img'
     },
     oss: {
       secretId: process.env.OSS_SECRET_ID,
