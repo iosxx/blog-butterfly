@@ -21,13 +21,12 @@ module.exports = {
       formatExt: "",
     }
   },
-  
   image: {
     enable: true,
     platform: 'local',
     local: {
-      outputDir: './source/_posts/img',
-      prefixKey: 'https://cdn.jsdmirror.com/gh/iosxx/blog@posts/img'
+      outputDir: './source/images/img',
+      prefixKey: 'https://fastly.jsdelivr.net/gh/xinkeji/hblog/images/yuque'
     },
     oss: {
       secretId: process.env.OSS_SECRET_ID,
