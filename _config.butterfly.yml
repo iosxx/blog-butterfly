@@ -83,13 +83,13 @@ avatar:
 disable_top_img: false
 
 # 如果页面未设置横幅，则显示默认横幅
-default_top_img: false
+default_top_img: true
 
 # 首页横幅图片
-index_img: false
+index_img: true
 
 # 归档页横幅图片
-archive_img: false
+archive_img: true
 
 # 注意: 标签页 (单个标签页)，非标签列表页
 tag_img: false
@@ -195,7 +195,7 @@ subtitle:
 # 5: 信息显示在封面上
 # 6: 瀑布流布局 - 封面在上，信息在下
 # 7: 瀑布流布局 - 信息显示在封面上
-index_layout: 3
+index_layout: 7
 
 # 首页显示文章摘要
 # 1: description
@@ -223,13 +223,13 @@ toc:
 post_copyright:
   enable: true
   decode: false
-  author_href: https://blog.ccknbc.cc/
+  author_href: https://iosxx.github.io
   license: CC BY-NC-SA 4.0
   license_url: https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 # 赞赏/打赏
 reward:
-  enable: true
+  enable: flase
   text: 赞赏
   QR_code:
     - img: https://cdn.jsdmirror.com/gh/ccknbc-backup/cdn/logo/qr.png
@@ -247,7 +247,7 @@ post_edit:
   url:
 
 edit:
-  enable: true
+  enable: false
   yuque: https://www.yuque.com/ccknbc/blog/
   # gitlab: false
   # gitlab_ide: false
@@ -879,7 +879,7 @@ site_verification:
 # 自定义主题色
 # 注意: 颜色值必须用双引号包裹，如 "#000"，否则可能导致错误!
 theme_color:
-  enable: true
+  enable: false
   main: "#8FBC8F"
   paginator: "#00c4b6"
   button_hover: "#FF7242"
@@ -1182,7 +1182,7 @@ CDN:
   # 选项: local/jsdelivr/unpkg/cdnjs/custom
   # 注意: 开发版内部脚本只能使用 'local'
   # 注意: 第三方脚本设为 'local' 时，需安装 hexo-butterfly-extjs
-  internal_provider: local
+  internal_provider: unpkg
   third_party_provider: custom
 
   # URL添加版本号，true 或 false
