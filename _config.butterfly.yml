@@ -63,7 +63,7 @@ code_blocks:
 social:
   # fab fa-github: https://github.com/xxxxx || Github || '#24292e'
   # fas fa-envelope: mailto:xxxxxx@gmail.com || Email || '#4a7dbe'
-  fa-brands fa-github: https://github.com/CCKNBC || GitHub
+  fa-brands fa-github: https://github.com/ || GitHub
   fa-solid fa-envelope: mailto:status@ccknbc.cc?contenttype=text/html&subject=CC的状态监控故障反馈&body=请告知CC服务异常详情&inquiry=yes || Email
   fa-brands fa-bilibili: https://space.bilibili.com/1404413254 || BiliBili
   fa-brands fa-weibo: https://weibo.com/CommonCulture || Weibo
@@ -86,10 +86,10 @@ disable_top_img: false
 default_top_img: true
 
 # 首页横幅图片
-index_img: true
+index_img: falsh
 
 # 归档页横幅图片
-archive_img: true
+archive_img: false
 
 # 注意: 标签页 (单个标签页)，非标签列表页
 tag_img: false
@@ -195,7 +195,7 @@ subtitle:
 # 5: 信息显示在封面上
 # 6: 瀑布流布局 - 封面在上，信息在下
 # 7: 瀑布流布局 - 信息显示在封面上
-index_layout: 7
+index_layout: 5
 
 # 首页显示文章摘要
 # 1: description
