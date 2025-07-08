@@ -83,7 +83,7 @@ avatar:
 disable_top_img: false
 
 # 如果页面未设置横幅，则显示默认横幅
-default_top_img: true
+default_top_img: false
 
 # 首页横幅图片
 index_img: falsh
