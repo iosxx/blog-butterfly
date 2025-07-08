@@ -124,9 +124,9 @@ cover:
     - https://cdn.jsdmirror.com/npm/hexo-theme-anzhiyu/source/img/default_cover.jpg
 
 # Replace Broken Images
-error_img:
-  flink: https://cdn.jsdmirror.com/npm/hexo-theme-anzhiyu/source/img/404.jpg
-  post_page: https://cdn.jsdmirror.com/npm/hexo-theme-anzhiyu/source/img/friend_404.gif
+# error_img:
+ # flink: #https://cdn.jsdmirror.com/npm/hexo-theme-anzhiyu/source/img/404.jpg
+  #post_page: #https://cdn.jsdmirror.com/npm/hexo-theme-anzhiyu/source/img/friend_404.gif
 
 
 # A simple 404 page
