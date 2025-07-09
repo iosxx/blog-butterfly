@@ -223,7 +223,7 @@ toc:
 post_copyright:
   enable: true
   decode: false
-  author_href: https://blog.ccknbc.cc/
+  author_href: https://g0f.cn/
   license: CC BY-NC-SA 4.0
   license_url: https://creativecommons.org/licenses/by-nc-sa/4.0/
 
@@ -601,7 +601,7 @@ comments:
   # 不需要评论请留空
   # 选择: Disqus/Disqusjs/Livere/Gitalk/Valine/Waline/Utterances/Facebook Comments/Twikoo/Giscus/Remark42/Artalk
   # 双评论系统格式 : Disqus,Waline
-  use: Waline # ,Utterances
+  use: twikoo # ,Utterances
   # 在按钮旁显示评论系统名称
   text: true
   # 懒加载: 当评论元素进入视口时加载
@@ -748,7 +748,7 @@ facebook_comments:
 # Twikoo
 # https://github.com/imaegoo/twikoo
 twikoo:
-  envId: https://twikoo.ccknbc.cc
+  envId: https://twikoo.tangguo.life
   region:
   # 使用Twikoo访问量作为页面浏览量
   visitor: false
@@ -825,9 +825,9 @@ microsoft_clarity: sbylomdc08
 
 # https://umami.is/
 umami_analytics:
-  enable: true
+  enable: false
   # 自托管配置，设置Umami实例的主机名
-  serverURL: https://umami.ccknbc.cc
+  serverURL: 
   website_id: fa854022-4f46-4260-984b-c51cb24720e6
   option:
   UV_PV:
@@ -878,7 +878,7 @@ site_verification:
 # 自定义主题色
 # 注意: 颜色值必须用双引号包裹，如 "#000"，否则可能导致错误!
 theme_color:
-  enable: true
+  enable: false
   main: "#8FBC8F"
   paginator: "#00c4b6"
   button_hover: "#FF7242"
