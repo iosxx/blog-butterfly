@@ -380,8 +380,8 @@ webpushr:
   # 否则可在网页端向访问者或订阅用户发送推送 https://www.webpushr.com/api-playground
   # 例如GitHub Actions环境变量配置，参数名不变，密钥名自定义，可参考如下
   # env:
-       webpushrKey: ${{ secrets.WEBPUSHR_KEY }}
-       webpushrAuthToken: ${{ secrets.WEBPUSHR_AUTH_TOKEN }}
+     #  webpushrKey: ${{ secrets.WEBPUSHR_KEY }}
+      # webpushrAuthToken: ${{ secrets.WEBPUSHR_AUTH_TOKEN }}
   # 如果您的仓库私有，则无需担心此问题
 
   trackingCode: "BO-SThKZ_pDGIAd_Odx49hQjFjki5-ifmrcVbIm6jBvcCNFq8IoywE7C1QMwY6_92AVGb-_LTB7kYSYuh6ybO0s"
