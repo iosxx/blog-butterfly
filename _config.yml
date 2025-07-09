@@ -213,13 +213,13 @@ search:
   content: true
 
 algolia:
-  appId: "947RX7HP3E"
-  applicationID: "947RX7HP3E"
-  apiKey: "9114b3fa2a3307b2cc8eec7e3ae5a8ea"
+  appId: "RFX4HVHM72"
+  applicationID: "RFX4HVHM72"
+  apiKey: "6f57d026c95d0c98ba3600ff1f919cb3"
   totalPages: "1"
   per_page: "100"
   chunkSize: 5000
-  indexName: "ccknbc-blog"
+  indexName: "果粉圈"
   fields:
     - title
     - content:strip
