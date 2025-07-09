@@ -509,7 +509,7 @@ math:
 # --------------------------------------
 
 search:
-  # 选择: algolia_search / local_search / docsearch
+  # 选择: local_search / algolia_search / docsearch
   # 不需要搜索请留空
   use: docsearch
   placeholder: 'Ctrl/⌘ + K 唤醒搜索服务'
@@ -818,25 +818,24 @@ crisp:
 google_analytics: G-QB09N5MVV8
 
 # https://www.cloudflare.com/zh-tw/web-analytics/
-cloudflare_analytics: 35785b58f09f472ebfd7a2854973e6b8
+cloudflare_analytics: ab52752ac2d44c2887c94f9769a97e78
 
 # https://clarity.microsoft.com/
-microsoft_clarity: an4gdfm6a9
+microsoft_clarity: sbylomdc08
 
 # https://umami.is/
 umami_analytics:
   enable: true
   # 自托管配置，设置Umami实例的主机名
   serverURL: https://umami.ccknbc.cc
-  website_id: 350b8ab7-530f-40b5-81d2-3cced4749c75
+  website_id: fa854022-4f46-4260-984b-c51cb24720e6
   option:
   UV_PV:
     site_uv: true
     site_pv: true
     page_pv: true
     # Umami云 (API密钥) / 自托管Umami (令牌)
-    token: YWg2j79TuJjDQdwt9mMCMQmA+DZbXfaBDzvWjsJfAW6C3kjx1/gb3+CvXNu7QoSF72QpRNcHzOb1Uzva7VTMOiwQXNx7YKHvjMMitVasb4n/jjxKvdJg20U/K0wyebQSxwoEDZ0w2oqDWhnU1FpIyC6Kdbm5S3MElUF+krJyw+EVq6WscU404kJL6wuIHVG18qK/ZoRocY8l+SNiVpwlsVDdybrxJ0q4eoL3HL57P2GAlM7ZZSSTuj3doq/ETM7eQ5EzjISSDSmasddYnEeX8StBf0Ud24foYVM/KpK82RnBA9R/mGn/bA+ow0vyGHpTgME4UlOaaMMeRWqstHP1tleLkKj5hCl7cA==
-
+    token: api_ckGpmBKoXeXla5JENFEVVlrKZ47SH9ff
 # --------------------------------------
 # 广告设置
 # --------------------------------------
