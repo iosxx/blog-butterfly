@@ -601,7 +601,7 @@ comments:
   # 不需要评论请留空
   # 选择: Disqus/Disqusjs/Livere/Gitalk/Valine/Waline/Utterances/Facebook Comments/Twikoo/Giscus/Remark42/Artalk
   # 双评论系统格式 : Disqus,Waline
-  use: waline # ,Utterances
+  use: twikoo # ,Utterances
   # 在按钮旁显示评论系统名称
   text: true
   # 懒加载: 当评论元素进入视口时加载
@@ -753,7 +753,7 @@ twikoo:
   # 使用Twikoo访问量作为页面浏览量
   visitor: false
   option:
-
+    
 # Giscus
 # https://giscus.app/
 giscus:
