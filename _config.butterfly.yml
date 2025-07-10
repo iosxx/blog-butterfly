@@ -121,8 +121,6 @@ cover:
   archives_enable: true
   # 未设置封面时显示的默认封面
   default_cover:
-    - https://42f2671d685f51e10fc6-b9fcecea3e50b3b59bdc28dead054ebc.ssl.cf5.rackcdn.com/illustrations/Firmware_jw6u.svg
-    - https://cdn.jsdmirror.com/npm/hexo-theme-anzhiyu/source/img/default_cover.jpg
 
 # 替换损坏图片
 error_img:
