@@ -1,6 +1,6 @@
 ---
 title: {{ title }}
-translate_title: 
+abbrlink:
 subtitle: 
 date: {{ date }}
 updated: {{ date }}
