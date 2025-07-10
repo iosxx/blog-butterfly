@@ -409,7 +409,7 @@ webpushr:
   # 您也可以将segment 设置为 all-users 对应的ID，同样也可以实现推送至所有用户
   # sid: "74194171" # 单个用户ID 可在控制台查看 https://app.webpushr.com/subscribers
 
-  sw_self: true
+  sw_self: false
 
   # 此外，在文章 Front-Matter 处
   # 可覆盖 auto_hide 和 expire 配置，针对需要特别提醒文章可以设置不自动隐藏及过期时间延长等操作
