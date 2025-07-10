@@ -7,9 +7,7 @@ updated: {{ date }}
 tags: []
 categories: 
 description: 
-cover: <% page.posts.each(function(post, i){ %>
-    <%= post.cover %>
-<% } %>
+cover: 
 top_img: 
 copyright_author: 
 copyright_author_href: 
