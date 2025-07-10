@@ -229,7 +229,7 @@ post_copyright:
 
 # 赞赏/打赏
 reward:
-  enable: true
+  enable: false
   text: 赞赏
   QR_code:
     - img: https://cdn.jsdmirror.com/gh/ccknbc-backup/cdn/logo/qr.png
