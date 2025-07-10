@@ -37,7 +37,7 @@ workbox.precaching.cleanupOutdatedCaches();
 
 // 缓存名称
 workbox.core.setCacheNameDetails({
-    prefix: "CC的部落格",
+    prefix: "果粉圈",
     suffix: "缓存",
     precache: "预先",
     runtime: "运行时",
@@ -93,14 +93,7 @@ const referrerDomains = [
 
 // 定义主站和备用站点的URL列表
 const mainSiteUrl = 'https://blog.ccknbc.cc';
-const backupSiteUrls = [
-    'https://vercel.blog.ccknbc.cc',
-    'https://cloudflare.blog.ccknbc.cc',
-    'https://netlify.blog.ccknbc.cc',
-    'https://github.blog.ccknbc.cc',
-    'https://gitlab.blog.ccknbc.cc',
-    'https://ccknbc.bitbucket.io'
-];
+
 
 // 函数用于判断是否为 CDN URL
 function isCdnUrl(url, cdnList) {
