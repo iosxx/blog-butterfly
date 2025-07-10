@@ -1190,8 +1190,8 @@ CDN:
   # 自定义格式
   # 示例: https://cdn.staticfile.org/${cdnjs_name}/${version}/${min_cdnjs_file}
   #custom_format: https://cdn.smartcis.cn/npm/${name}@${version}/${min_file}
-  #custom_format: https://cdn.jsdmirror.com/npm/${name}/${file}
-  custom_format: https://cdn.smartcis.cn/npm/${name}/${file}
+  custom_format: https://cdn.jsdmirror.com/npm/${name}/${file}
+
 
   option:
     # abcjs_basic_js:
