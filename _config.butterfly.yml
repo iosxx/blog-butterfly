@@ -195,7 +195,7 @@ subtitle:
 # 5: 信息显示在封面上
 # 6: 瀑布流布局 - 封面在上，信息在下
 # 7: 瀑布流布局 - 信息显示在封面上
-index_layout: 3
+index_layout: 1
 
 # 首页显示文章摘要
 # 1: description
