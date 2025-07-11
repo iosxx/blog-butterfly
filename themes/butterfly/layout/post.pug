@@ -8,10 +8,6 @@ block content
     article#article-container.container.post-content
       if page.summary && theme.ai_summary.enable
         include includes/post/post-summary.pug
-
-   #   if theme.noticeOutdate.enable && page.noticeOutdate !== false
-    #    include includes/post/outdate-notice.pug
-   #   else
         !=page.content
     include includes/post/post-copyright.pug
     .tag_share
