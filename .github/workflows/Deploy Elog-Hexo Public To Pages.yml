@@ -4,16 +4,14 @@ on:
   repository_dispatch:
   workflow_dispatch:
   push:
-    branches: [master]
+    branches: master
 
 jobs:
   deploy:
     name: Deploy Elog-Hexo Public To Pages
-    runs-on: ubuntu-24.04  # 固定版本提高稳定性
-    timeout-minutes: 20    # 防止卡死
+    runs-on: ubuntu-latest
     env:
       TZ: Asia/Shanghai
-      # 保留所有环境变量（按需使用）
       YUQUE_TOKEN: ${{ secrets.YUQUE_TOKEN }}
       YUQUE_LOGIN: ${{ secrets.YUQUE_LOGIN }}
       YUQUE_REPO: ${{ secrets.YUQUE_REPO }}
@@ -26,106 +24,88 @@ jobs:
       webpushrAuthToken: ${{ secrets.WEBPUSHR_AUTH_TOKEN }}
 
     steps:
-      # ===== 代码检出 =====
-      - name: Checkout Code
-        uses: actions/checkout@v4  # 固定版本
+      - name: Checkout
+        uses: actions/checkout@v4  # 更新到最新版本
         with:
           ref: master
-          fetch-depth: 1           # 浅克隆加速
+          fetch-depth: 1  # 减少历史获取，只获取最新提交
           submodules: false
 
-      # ===== Node环境设置 =====
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        id: setup-node
+      - name: Setup Node
+        uses: actions/setup-node@v4  # 更新到最新版本
         with:
-          node-version: "20"       # 固定LTS版本
-          cache: "npm"             # 启用自动缓存
-          check-latest: false      # 禁用自动更新（提高稳定性）
+          node-version: '18'  # 指定稳定版本而非最新版
+          cache: 'npm'
 
-      # ===== 依赖安装 =====
+      - name: Cache Dependencies
+        uses: actions/cache@v4  # 更新到最新版本
+        id: cache-dependencies
+        with:
+          path: |
+            node_modules
+            $HOME/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Install Dependencies
-        run: npm ci --prefer-offline  # 使用ci模式确保一致性
-        env:
-          NODE_ENV: production
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: |
+          npm ci --cache $HOME/.npm --prefer-offline  # 使用npm ci代替npm i并启用缓存
 
-      # ===== 内容下载 =====
       - name: Download Elog Posts
-        uses: dawidd6/action-download-artifact@v4  # 升级到v4
+        uses: dawidd6/action-download-artifact@v11
         with:
-          workflow: ${{ github.workflow }}  # 确保下载当前工作流的构件
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: master
           name: 'Elog Posts'
           path: 'source/_posts'
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           if_no_artifact_found: warn
 
       - name: Download Elog Cache
-        uses: dawidd6/action-download-artifact@v4
+        uses: dawidd6/action-download-artifact@v11
         with:
-          workflow: ${{ github.workflow }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: master
           name: 'Elog Cache'
           path: 'elog'
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           if_no_artifact_found: warn
 
-      # ===== 生成静态站点 =====
       - name: Generate
-        run: npm run elog
-        env:
-          CI: true  # 标记CI环境
+        run: |
+          npm run elog
 
-      # ===== 构件上传 =====
-      - name: Upload Elog Assets
+      - name: Upload Elog Cache
         uses: actions/upload-artifact@v4
         with:
-          name: 'Elog Assets'
-          path: |
-            elog/
-            source/_posts/
-          compression-level: 0  # 禁用压缩加速上传
-          retention-days: 7      # 缩短保留时间
-          if-no-files-found: warn
+          name: 'Elog Cache'
+          path: elog
+          retention-days: 90
 
-      # ===== 部署到posts分支 =====
+      - name: Upload Elog Posts
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'Elog Posts'
+          path: 'source/_posts'
+          retention-days: 90
+
       - name: Deploy Markdown Posts To Branch Posts
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: posts
           folder: ./source/_posts/
           force: false
-          clean: true  # 清理目标目录
-          git-config-name: "github-actions"
-          git-config-email: "41898282+github-actions[bot]@users.noreply.github.com"
-          commit-message: "Content: ${{ github.sha }}"
+          git-config-name: "github-actions[bot]"
+          git-config-email: "github-actions[bot]@users.noreply.github.com"
+          commit-message: ${{ github.event.head_commit.message }}
 
-      # ===== 部署到GitHub Pages =====
       - name: Deploy Hexo Public To Pages
-        uses: JamesIves/github-pages-deploy-action@v4
+        uses: JamesIves/github-pages-deploy-action@v4  # 使用专用部署action替代自定义脚本
         with:
-          branch: master
-          folder: ./public
-          repository-name: iosxx/iosxx.github.io  # 目标仓库
-          token: ${{ secrets.GH_TOKEN }}
-          clean: true
-          single-commit: true  # 保持提交历史整洁
-
-      # ===== 可选：部署到其他平台 =====
-      #- name: Deploy to Bitbucket
-      #  run: |
-      #    cd ./public
-      #    git init
-      #    git config user.name "github-actions"
-      #    git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      #    git add -A
-      #    git commit -m "Deploy: ${{ github.sha }}"
-      #    git push --force --quiet "https://ccknbc:${{ secrets.BB_TOKEN }}@bitbucket.org/ccknbc/ccknbc.bitbucket.io.git" master:master
-      #
-      #- name: Deploy to Coding
-      #  run: |
-      #    cd ./public
-      #    git init
-      #    git config user.name "github-actions"
-      #    git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      #    git add -A
-      #    git commit -m "Deploy: ${{ github.sha }}"
-      #    git push --force --quiet "https://${{ secrets.CD_USER }}:${{ secrets.CD_TOKEN }}@e.coding.net/ccknbc/blog/butterfly.git" master:master
+          branch: master  # 部署到master分支
+          folder: public  # 部署public目录
+          repository-name: iosxx/iosxx.github.io  # 指定目标仓库
+          token: ${{ secrets.GH_TOKEN }}  # 使用访问令牌
+          git-config-name: "github-actions[bot]"
+          git-config-email: "github-actions[bot]@users.noreply.github.com"
+          commit-message: ${{ github.event.head_commit.message }} $(date +"%Z %Y-%m-%d %A %H:%M:%S") Updated By GitHub Actions    
