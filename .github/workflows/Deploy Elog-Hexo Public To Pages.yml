@@ -90,7 +90,7 @@ jobs:
       - name: Deploy Markdown Posts To Branch Posts
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: posts
+          branch: master
           folder: ./source/_posts/
           force: false
           git-config-name: "github-actions[bot]"
