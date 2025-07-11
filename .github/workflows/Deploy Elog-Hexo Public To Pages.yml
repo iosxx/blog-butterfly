@@ -100,16 +100,14 @@ jobs:
           commit-message: ${{ github.event.head_commit.message }}
 
       - name: Deploy Hexo Public To Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          branch: master
-          folder: public
-          repository-name: iosxx/iosxx.github.io
-          token: ${{ secrets.GH_TOKEN }}
-          git-config-name: "github-actions[bot]"
-          git-config-email: "github-actions[bot]@users.noreply.github.com"
-          clean: true  # 添加clean选项以确保工作树干净
-          # 修复提交消息格式，使用run脚本动态生成日期
-          commit-message: |
-            ${{ github.event.head_commit.message }} 
-            $(date +"%Z %Y-%m-%d %A %H:%M:%S") Updated By GitHub Actions    
+        run: |
+          cd public
+          git config --global init.defaultBranch master
+          git config --global http.postBuffer 524288000
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git init
+          git add -A
+          git branch -m master
+          git commit -m "${{ github.event.head_commit.message }} $(date +"%Z %Y-%m-%d %A %H:%M:%S") Updated By GitHub Actions"
+          git push --force --quiet "https://iosxx:${{ secrets.GH_TOKEN }}@github.com/iosxx/iosxx.github.io" master:master    
