@@ -1,5 +1,6 @@
 name: 🧹 Workflow Run Cleaner
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 0 1 * *'
 jobs:
