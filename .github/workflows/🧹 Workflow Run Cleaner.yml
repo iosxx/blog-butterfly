@@ -1,68 +1,53 @@
-name: "🧹 Workflow Run Cleaner"  # 使用图标前缀提高可见性
+name: 🧹 Cleanup Old Workflow Runs
 
+# 触发条件：每周日自动运行，或手动触发
 on:
-  # 每周一北京时间早上8点自动清理（保留7天记录）
   schedule:
-    - cron: '0 0 * * 1'  # UTC时间每周一00:00 (北京时间周一08:00)
-  
-  # 手动触发选项
+    - cron: '0 0 * * 0'  # 每周日0点执行周度清理
   workflow_dispatch:
     inputs:
       full_cleanup:
-        description: "🔥 执行全部清理（删除所有历史）"
+        description: '是否执行全量清理（删除所有符合条件的记录，忽略保留天数）'
         type: boolean
         required: false
         default: false
 
 jobs:
-  cleanup:
-    name: "Cleanup Workflow Runs"
+  determine-mode:
     runs-on: ubuntu-latest
-    
-    # 关键：添加工作流标签提高可见性
-    env:
-      WORKFLOW_LABEL: "cleanup"
-    
+    outputs:
+      mode: ${{ steps.set-mode.outputs.mode }}
     steps:
-      # 确定清理模式
-      - name: Determine cleanup mode
-        id: mode
+      - name: 判定清理模式
+        id: set-mode
         run: |
-          if ${{ inputs.full_cleanup == 'true' }}; then
+          if ${{ github.event.inputs.full_cleanup == 'true' }}; then
             echo "mode=full" >> $GITHUB_OUTPUT
-            echo "::warning::🚨 全量清理模式激活! 将删除所有可清理的工作流历史"
+            echo "::warning::🚨 全量清理模式激活！将删除所有符合条件的工作流历史"
           else
             echo "mode=weekly" >> $GITHUB_OUTPUT
-            echo "::notice::ℹ️ 执行周度清理 (保留7天记录)"
+            echo "::notice::ℹ️ 执行周度清理（保留7天内记录）"
           fi
-      
-      # 周度清理模式 (默认)
-      - name: Weekly cleanup (7 days)
-        if: steps.mode.outputs.mode == 'weekly'
+
+  cleanup:
+    needs: determine-mode
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write  # 必须具备删除工作流的权限
+    steps:
+      - name: 清理工作流历史
         uses: Mattraks/delete-workflow-runs@main
         with:
-          retain_days: 7
-          keep_minimum_runs: 10
-          exclude_workflows: "Workflow Run Cleaner"
-          exclude_status: "in_progress,queued"
-          debug: true
-      
-      # 全量清理模式 (手动触发)
-      - name: Full cleanup (DELETE ALL)
-        if: steps.mode.outputs.mode == 'full'
-        uses: Mattraks/delete-workflow-runs@main
-        with:
-          retain_days: 0
-          keep_minimum_runs: 0
-          exclude_status: "in_progress,queued"
-          exclude_workflows: "Workflow Run Cleaner"
-          debug: true
-      
-      # 完成通知
-      - name: Completion notice
-        run: |
-          if [ "${{ steps.mode.outputs.mode }}" == "full" ]; then
-            echo "::warning::✅ 全量清理完成! 已删除所有可清理的工作流历史"
-          else
-            echo "::notice::✅ 周度清理完成! 保留7天内的运行记录"
-          fi
+          token: ${{ secrets.GITHUB_TOKEN }}
+          # 保留天数：周度模式保留7天，全量模式保留0天（仅删除旧于0天的记录，即所有可删记录）
+          retain_days: ${{ needs.determine-mode.outputs.mode == 'full' && 0 || 7 }}
+          # 至少保留的运行次数（防止误删所有记录）
+          keep_minimum_runs: 5
+          # 可选：仅删除匹配名称模式的工作流（如 'Deploy*' 匹配所有部署相关工作流）
+          # delete_workflow_pattern: 'Deploy*'
+          # 可选：按状态删除（如 'completed' 仅删除已完成的）
+          # delete_workflow_by_state_pattern: 'completed'
+          # 可选：按结论删除（如 'failure' 仅删除失败的运行）
+          # delete_run_by_conclusion_pattern: 'failure'
+          # 测试模式：设为true时仅显示要删除的记录，不实际删除
+          dry_run: false
