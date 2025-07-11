@@ -1,0 +1,57 @@
+name: Workflow Run Cleaner
+on:
+  workflow_dispatch: # 仅手动触发
+    inputs:
+      cleanup_mode:
+        description: "清理模式 (normal/all)"
+        type: choice
+        required: true
+        default: "normal"
+        options:
+          - normal
+          - all
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      # 模式选择逻辑
+      - name: Determine cleanup mode
+        id: mode
+        run: |
+          if [ "${{ inputs.cleanup_mode }}" == "all" ]; then
+            echo "mode=aggressive" >> $GITHUB_OUTPUT
+            echo "::warning::⚠️ 正在执行全量清理! 将删除所有可清理的工作流历史"
+          else
+            echo "mode=normal" >> $GITHUB_OUTPUT
+            echo "::notice::ℹ️ 执行标准清理 (保留30天记录)"
+          fi
+      
+      # 标准清理模式
+      - name: Normal cleanup
+        if: steps.mode.outputs.mode == 'normal'
+        uses: Mattraks/delete-workflow-runs@main
+        with:
+          retain_days: 30
+          keep_minimum_runs: 20
+          exclude_workflows: "Workflow Run Cleaner"
+          exclude_status: "in_progress,queued"
+          debug: true
+      
+      # 全量清理模式
+      - name: Full cleanup (DELETE ALL)
+        if: steps.mode.outputs.mode == 'aggressive'
+        uses: Mattraks/delete-workflow-runs@main
+        with:
+          retain_days: 0      # 保留0天 = 删除所有
+          keep_minimum_runs: 0 # 保留0次运行
+          exclude_status: "in_progress,queued" # 仅保护进行中任务
+          dry_run: false
+          debug: true
+      
+      # 完成通知
+      - name: Completion notice
+        run: |
+          echo "✅ 清理操作已完成!"
+          echo "清理模式: ${{ inputs.cleanup_mode }}"
+        if: always()
