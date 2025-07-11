@@ -51,7 +51,7 @@ jobs:
 
       # ===== 内容下载 =====
       - name: Download Elog Posts
-        uses: dawidd6/action-download-artifact@v4  # 升级到v4
+        uses: dawidd6/action-download-artifact@v6  # 升级到v4
         with:
           workflow: ${{ github.workflow }}  # 确保下载当前工作流的构件
           name: 'Elog Posts'
@@ -60,7 +60,7 @@ jobs:
           if_no_artifact_found: warn
 
       - name: Download Elog Cache
-        uses: dawidd6/action-download-artifact@v4
+        uses: dawidd6/action-download-artifact@v6
         with:
           workflow: ${{ github.workflow }}
           name: 'Elog Cache'
