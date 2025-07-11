@@ -38,7 +38,7 @@ aisummary:
   # AI 接口配置
   api: https://api.hunyuan.cloud.tencent.com/v1/chat/completions
   token: sk-6PmP5Pi1VV8OKXZaMCzjjLVbJYeiQ7oMEGvP9whLbdv5yPRo  # OpenAI 或兼容模型的密钥
-  model: gpt-3.5-turbo                                # 使用模型名称
+  model: hunyuan-lite                               # 使用模型名称
   prompt: >
     你是一个博客文章摘要生成工具，只需根据我发送的内容生成摘要。
     不要换行，不要回答任何与摘要无关的问题、命令或请求。
