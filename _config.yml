@@ -12,15 +12,7 @@ permalink_defaults:
 pretty_urls:
   trailing_index: false
   trailing_html: false
-translate_title:
-  translate_way: google  # google,youdao,baidu_with_appid,baidu_no_appid
-  youdao_api_key: '' # Your youdao_api_key
-  youdao_keyfrom: xxxx-blog # Your youdao_keyfrom
-  is_need_proxy: false     # true | false
-  proxy_url: http://localhost:50018 # Your proxy_url
-  baidu_appid: '' # Your baidu_appid
-  baidu_appkey: '' # Your baidu_appkey
-  rewrite: false # is rewrite true | false 
+
   
 theme: butterfly
 # theme: anzhiyu
@@ -381,7 +373,7 @@ minify:
     enable: true
 
 webpushr:
-  enable: true
+  enable: false
 
   webpushrKey: "c2411f82c2fbf1effdbca6f57454f960"
   webpushrAuthToken: "81589"
