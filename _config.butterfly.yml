@@ -1253,10 +1253,13 @@ mourn:
   days: [4-5, 5-12, 7-7, 9-18, 12-13]
 
 # AI 摘要
+# --------------------------------------
+# 文章设置
+# --------------------------------------
+# 文章AI摘要是否开启，会自动检索文章色summary字段，若没有则不显示
 ai_summary:
-  enable: false
-  postSelector: '#post #article-container'
-  key: 'VCtoijR43E2uiVWkrZiC'
-  postURL: "/^https?://[^/]+/posts/[^/]+/"
-  wordLimit: 1000
-  title: "AI 文章摘要"
+  enable: true
+  title: 果粉圈
+  loadingText: 果粉圈AI正在绞尽脑汁想思路ING···
+  modelName: g0f.cn
+
