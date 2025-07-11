@@ -25,38 +25,36 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@main
         with:
           ref: master
-          fetch-depth: 1
+          fetch-depth: 0
           submodules: false
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@main
+        id: setup-node
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: "latest"
+          check-latest: true
+          cache: "npm"
 
-      - name: Cache Dependencies
-        uses: actions/cache@v4
+      - name: Catch Dependencies
+        uses: actions/cache@main
         id: cache-dependencies
         with:
-          path: |
-            node_modules
-            $HOME/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          path: node_modules
+          key: ${{runner.OS}}-${{hashFiles('**/package-lock.json')}}
 
       - name: Install Dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: |
-          npm ci --cache $HOME/.npm --prefer-offline
+          npm i
 
       - name: Download Elog Posts
         uses: dawidd6/action-download-artifact@v11
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{secrets.GITHUB_TOKEN}}
           branch: master
           name: 'Elog Posts'
           path: 'source/_posts'
@@ -65,7 +63,7 @@ jobs:
       - name: Download Elog Cache
         uses: dawidd6/action-download-artifact@v11
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{secrets.GITHUB_TOKEN}}
           branch: master
           name: 'Elog Cache'
           path: 'elog'
@@ -101,7 +99,7 @@ jobs:
 
       - name: Deploy Hexo Public To Pages
         run: |
-          cd public
+          cd ./public
           git config --global init.defaultBranch master
           git config --global http.postBuffer 524288000
           git config --global user.name "github-actions[bot]"
@@ -110,4 +108,5 @@ jobs:
           git add -A
           git branch -m master
           git commit -m "${{ github.event.head_commit.message }} $(date +"%Z %Y-%m-%d %A %H:%M:%S") Updated By GitHub Actions"
-          git push --force --quiet "https://iosxx:${{ secrets.GH_TOKEN }}@github.com/iosxx/iosxx.github.io" master:master    
+          git push --force --quiet "https://iosxx:${{ secrets.GH_TOKEN }}@github.com/iosxx/iosxx.github.io" master:master
+      
