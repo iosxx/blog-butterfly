@@ -25,20 +25,20 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4  # 更新到最新版本
+        uses: actions/checkout@v4
         with:
           ref: master
-          fetch-depth: 1  # 减少历史获取，只获取最新提交
+          fetch-depth: 1
           submodules: false
 
       - name: Setup Node
-        uses: actions/setup-node@v4  # 更新到最新版本
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'  # 指定稳定版本而非最新版
+          node-version: '18'
           cache: 'npm'
 
       - name: Cache Dependencies
-        uses: actions/cache@v4  # 更新到最新版本
+        uses: actions/cache@v4
         id: cache-dependencies
         with:
           path: |
@@ -51,7 +51,7 @@ jobs:
       - name: Install Dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: |
-          npm ci --cache $HOME/.npm --prefer-offline  # 使用npm ci代替npm i并启用缓存
+          npm ci --cache $HOME/.npm --prefer-offline
 
       - name: Download Elog Posts
         uses: dawidd6/action-download-artifact@v11
@@ -100,12 +100,16 @@ jobs:
           commit-message: ${{ github.event.head_commit.message }}
 
       - name: Deploy Hexo Public To Pages
-        uses: JamesIves/github-pages-deploy-action@v4  # 使用专用部署action替代自定义脚本
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: master  # 部署到master分支
-          folder: public  # 部署public目录
-          repository-name: iosxx/iosxx.github.io  # 指定目标仓库
-          token: ${{ secrets.GH_TOKEN }}  # 使用访问令牌
+          branch: master
+          folder: public
+          repository-name: iosxx/iosxx.github.io
+          token: ${{ secrets.GH_TOKEN }}
           git-config-name: "github-actions[bot]"
           git-config-email: "github-actions[bot]@users.noreply.github.com"
-          commit-message: ${{ github.event.head_commit.message }} $(date +"%Z %Y-%m-%d %A %H:%M:%S") Updated By GitHub Actions    
+          clean: true  # 添加clean选项以确保工作树干净
+          # 修复提交消息格式，使用run脚本动态生成日期
+          commit-message: |
+            ${{ github.event.head_commit.message }} 
+            $(date +"%Z %Y-%m-%d %A %H:%M:%S") Updated By GitHub Actions    
