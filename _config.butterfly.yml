@@ -289,12 +289,12 @@ footer:
   custom_text:
   copyright: false # 主题和框架的版权
   ICP: # 中国ICP备案
-    enable: true
+    enable: false
     url: https://beian.miit.gov.cn
     text: 鄂 ICP 备 2020019764 号
     icon: https://cdn.jsdmirror.com/gh/ccknbc-backup/cdn/logo/icp.png
   gongan: # 中国公安备案
-    enable: true
+    enable: false
     url: https://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42088102000092
     text: 鄂公网安备 42088102000092 号
     icon: https://cdn.jsdmirror.com/gh/ccknbc-backup/cdn/logo/gongan.png
