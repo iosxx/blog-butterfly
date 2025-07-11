@@ -1,33 +1,23 @@
-name: 🧹 全量清理所有工作流历史
+name: 🧹 自动全量清理工作流历史
 
-# 触发方式：仅手动触发（避免误操作）
 on:
+  # 每月1日自动执行全量清理
+  schedule:
+    - cron: '0 0 1 * *'
+  # 或手动触发（无需确认）
   workflow_dispatch:
-    inputs:
-      confirm_full_cleanup:
-        description: '请输入 "confirm" 确认执行全量清理（将删除所有非进行中的工作流历史）'
-        type: string
-        required: true
 
 jobs:
-  full-cleanup:
+  cleanup:
     runs-on: ubuntu-latest
     permissions:
-      actions: write  # 必须具备删除权限
-    if: ${{ github.event.inputs.confirm_full_cleanup == 'confirm' }}  # 验证确认信息
+      actions: write
     steps:
-      - name: 警告提示
-        run: |
-          echo "::warning::⚠️ 正在执行全量清理！将删除所有非进行中的工作流历史记录"
-          echo "::warning::⚠️ 此操作不可逆，请确保已备份必要数据"
-
       - name: 执行全量清理
         uses: Mattraks/delete-workflow-runs@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          retain_days: 0  # 保留天数设为0（删除所有旧于0天的记录，即所有可删记录）
-          keep_minimum_runs: 0  # 不保留最小运行次数（如需保留少量记录，可改为1-5）
-          delete_workflow_by_state_pattern: 'completed'  # 仅删除已完成的工作流（跳过进行中）
-          # 可选：指定删除特定工作流（如不限制则注释此行）
-          # delete_workflow_pattern: '*'  # 匹配所有工作流
-          dry_run: false  # 设为true可先预览删除范围，确认后改为false执行实际删除
+          retain_days: 0           # 删除所有旧于0天的记录（即全量删除）
+          keep_minimum_runs: 0     # 不保留任何运行记录
+          delete_workflow_by_state_pattern: 'completed'  # 仅删除已完成的工作流
+          dry_run: false           # 直接执行删除操作
