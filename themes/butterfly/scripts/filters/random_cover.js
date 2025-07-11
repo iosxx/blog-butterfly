@@ -5,65 +5,152 @@
 'use strict'
 
 hexo.extend.generator.register('post', locals => {
-  const previousIndexes = []
+  // 用于记录最近使用的封面索引
+  const recentIndexes = []
+  // 最大历史记录长度
+  let maxHistorySize = 3
 
   const getRandomCover = defaultCover => {
     if (!defaultCover) return false
     if (!Array.isArray(defaultCover)) return defaultCover
 
     const coverCount = defaultCover.length
+    if (coverCount === 1) return defaultCover[0]
 
-    if (coverCount === 1) {
-      return defaultCover[0]
+    // 动态计算最大历史记录长度
+    maxHistorySize = Math.min(coverCount - 1, 3)
+    
+    // 创建可用索引池
+    const availableIndexes = []
+    for (let i = 0; i < coverCount; i++) {
+      if (!recentIndexes.includes(i)) {
+        availableIndexes.push(i)
+      }
     }
 
-    const maxPreviousIndexes = coverCount === 2 ? 1 : (coverCount === 3 ? 2 : 3)
+    // 从可用池中随机选择
+    const randomIndex = availableIndexes.length > 0
+      ? availableIndexes[Math.floor(Math.random() * availableIndexes.length)]
+      : Math.floor(Math.random() * coverCount)
 
-    let index
-    do {
-      index = Math.floor(Math.random() * coverCount)
-    } while (previousIndexes.includes(index) && previousIndexes.length < coverCount)
-
-    previousIndexes.push(index)
-    if (previousIndexes.length > maxPreviousIndexes) {
-      previousIndexes.shift()
+    // 更新历史记录
+    recentIndexes.push(randomIndex)
+    if (recentIndexes.length > maxHistorySize) {
+      recentIndexes.shift()
     }
 
-    return defaultCover[index]
+    return defaultCover[randomIndex]
+  }
+
+  // 提取文章内容中的第一张图片
+  const extractFirstImage = content => {
+    if (!content) return null
+    
+    // 匹配Markdown图片语法
+    const mdRegex = /!\[.*?\]\((.*?)\)/
+    const mdMatch = content.match(mdRegex)
+    if (mdMatch && mdMatch[1]) return mdMatch[1]
+    
+    // 匹配HTML img标签
+    const htmlRegex = /<img\s+.*?src=['"](.*?)['"]/
+    const htmlMatch = content.match(htmlRegex)
+    if (htmlMatch && htmlMatch[1]) return htmlMatch[1]
+    
+    return null
+  }
+
+  // 处理防盗链图片 - 替换为本地路径或代理
+  const processAntiLeechImage = (url, postPath) => {
+    const imgTestReg = /\.(png|jpe?g|gif|svg|webp|avif)(\?.*)?$/i
+    
+    // 如果是相对路径，转换为绝对路径
+    if (url.startsWith('/')) {
+      return url;
+    }
+    
+    // 如果是本地图片且开启了post_asset_folder
+    if (hexo.config.post_asset_folder && 
+        !url.includes('://') && 
+        imgTestReg.test(url)) {
+      return `${postPath}${url}`;
+    }
+    
+    // 处理已知防盗链域名
+    const antiLeechDomains = [
+      'cdn.jsdmirror.com'
+      // 可以在此添加其他防盗链域名
+    ];
+    
+    // 检查是否是需要处理的防盗链图片
+    const isAntiLeech = antiLeechDomains.some(domain => url.includes(domain));
+    
+    if (isAntiLeech) {
+      // 方案1: 使用本地代理 (需要您自己实现代理功能)
+      // return `/image-proxy?url=${encodeURIComponent(url)}`;
+      
+      // 方案2: 替换为占位图
+      // return 'https://via.placeholder.com/800x400?text=Cover+Image';
+      
+      // 方案3: 跳过不使用
+      return null;
+    }
+    
+    return url;
   }
 
   const handleImg = data => {
     const imgTestReg = /\.(png|jpe?g|gif|svg|webp|avif)(\?.*)?$/i
     let { cover: coverVal, top_img: topImg } = data
 
-    // Add path to top_img and cover if post_asset_folder is enabled
+    // 处理top_img路径
     if (hexo.config.post_asset_folder) {
       if (topImg && topImg.indexOf('/') === -1 && imgTestReg.test(topImg)) {
         data.top_img = `${data.path}${topImg}`
       }
-      if (coverVal && coverVal.indexOf('/') === -1 && imgTestReg.test(coverVal)) {
-        data.cover = `${data.path}${coverVal}`
+    }
+
+    // 如果明确设置cover为false，直接返回
+    if (coverVal === false) return data
+
+    let extractedCover = null
+    
+    // 尝试提取文章内容中的第一张图片
+    if (!coverVal && data.content) {
+      extractedCover = extractFirstImage(data.content)
+      
+      // 处理防盗链图片
+      if (extractedCover) {
+        extractedCover = processAntiLeechImage(extractedCover, data.path)
       }
     }
 
-    if (coverVal === false) return data
+    // 处理用户设置的封面路径
+    if (hexo.config.post_asset_folder && coverVal) {
+      if (coverVal.indexOf('/') === -1 && imgTestReg.test(coverVal)) {
+        coverVal = `${data.path}${coverVal}`
+      }
+    }
 
-    // If cover is not set, use random cover
+    // 如果封面未设置，尝试使用提取的图片或随机封面
     if (!coverVal) {
       const { cover: { default_cover: defaultCover } } = hexo.theme.config
       const randomCover = getRandomCover(defaultCover)
-      data.cover = randomCover
-      coverVal = randomCover // update coverVal
+      
+      // 优先使用提取的文章图片，其次使用随机封面
+      data.cover = extractedCover || randomCover || false
+    } else {
+      data.cover = coverVal
     }
 
-    if (coverVal && (coverVal.indexOf('//') !== -1 || imgTestReg.test(coverVal))) {
+    // 如果封面是图片URL，设置封面类型
+    if (data.cover && (data.cover.indexOf('//') !== -1 || imgTestReg.test(data.cover))) {
       data.cover_type = 'img'
     }
 
     return data
   }
 
-  // https://github.com/hexojs/hexo/blob/master/lib%2Fplugins%2Fgenerator%2Fpost.ts
+  // 处理文章列表
   const posts = locals.posts.sort('date').toArray()
   const { length } = posts
 
