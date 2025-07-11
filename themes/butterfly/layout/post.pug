@@ -8,9 +8,11 @@ block content
     article#article-container.container.post-content
       if page.summary && theme.ai_summary.enable
         include includes/post/post-summary.pug
-else
+      else
         !=page.content
+
     include includes/post/post-copyright.pug
+    
     .tag_share
       if (page.tags.length > 0 && theme.post_meta.post.tags)
         .post-meta__tag-list
@@ -27,6 +29,7 @@ else
 
     if theme.post_pagination
       include includes/pagination.pug
+      
     if theme.related_post && theme.related_post.enable
       != related_posts(page,site.posts)
 
