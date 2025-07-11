@@ -1,6 +1,11 @@
 name: Workflow Run Cleaner
+
 on:
-  workflow_dispatch: # 仅手动触发
+  schedule:
+    # 每天北京时间早上8点自动执行30天清理
+    - cron: '0 0 * * *'  # UTC时间00:00 (北京时间08:00)
+  
+  workflow_dispatch:
     inputs:
       cleanup_mode:
         description: "清理模式 (normal/all)"
@@ -19,16 +24,16 @@ jobs:
       - name: Determine cleanup mode
         id: mode
         run: |
-          if [ "${{ inputs.cleanup_mode }}" == "all" ]; then
+          if [ "${{ inputs.cleanup_mode || 'normal' }}" == "all" ]; then
             echo "mode=aggressive" >> $GITHUB_OUTPUT
-            echo "::warning::⚠️ 正在执行全量清理! 将删除所有可清理的工作流历史"
+            echo "::warning::🚨 全量清理模式激活! 将删除所有可清理的工作流历史"
           else
             echo "mode=normal" >> $GITHUB_OUTPUT
             echo "::notice::ℹ️ 执行标准清理 (保留30天记录)"
           fi
       
-      # 标准清理模式
-      - name: Normal cleanup
+      # 标准清理模式 (默认)
+      - name: Normal cleanup (30 days)
         if: steps.mode.outputs.mode == 'normal'
         uses: Mattraks/delete-workflow-runs@main
         with:
@@ -38,20 +43,22 @@ jobs:
           exclude_status: "in_progress,queued"
           debug: true
       
-      # 全量清理模式
+      # 全量清理模式 (手动触发)
       - name: Full cleanup (DELETE ALL)
         if: steps.mode.outputs.mode == 'aggressive'
         uses: Mattraks/delete-workflow-runs@main
         with:
-          retain_days: 0      # 保留0天 = 删除所有
-          keep_minimum_runs: 0 # 保留0次运行
-          exclude_status: "in_progress,queued" # 仅保护进行中任务
-          dry_run: false
+          retain_days: 0
+          keep_minimum_runs: 0
+          exclude_status: "in_progress,queued"
+          exclude_workflows: "Workflow Run Cleaner"
           debug: true
       
       # 完成通知
       - name: Completion notice
         run: |
-          echo "✅ 清理操作已完成!"
-          echo "清理模式: ${{ inputs.cleanup_mode }}"
-        if: always()
+          if [ "${{ steps.mode.outputs.mode }}" == "aggressive" ]; then
+            echo "::warning::✅ 全量清理完成! 已删除所有可清理的工作流历史"
+          else
+            echo "::notice::✅ 标准清理完成! 保留30天内的运行记录"
+          fi
