@@ -1,51 +1,49 @@
-name:清理workflow runs
+name: Workflow Run Cleaner
 
 on:
+  # 每周一北京时间早上8点自动清理（保留7天记录）
   schedule:
-    # 每天北京时间早上8点自动执行30天清理
-    - cron: '0 0 * * *'  # UTC时间00:00 (北京时间08:00)
+    - cron: '0 0 * * 1'  # UTC时间每周一00:00 (北京时间周一08:00)
   
+  # 手动触发选项（在Actions界面清晰可见）
   workflow_dispatch:
     inputs:
-      cleanup_mode:
-        description: "清理模式 (normal/all)"
-        type: choice
-        required: true
-        default: "normal"
-        options:
-          - normal
-          - all
+      full_cleanup:
+        description: "执行全部清理？"
+        type: boolean
+        required: false
+        default: false
 
 jobs:
   cleanup:
     runs-on: ubuntu-latest
     steps:
-      # 模式选择逻辑
+      # 确定清理模式
       - name: Determine cleanup mode
         id: mode
         run: |
-          if [ "${{ inputs.cleanup_mode || 'normal' }}" == "all" ]; then
-            echo "mode=aggressive" >> $GITHUB_OUTPUT
+          if ${{ inputs.full_cleanup || 'false' }}; then
+            echo "mode=full" >> $GITHUB_OUTPUT
             echo "::warning::🚨 全量清理模式激活! 将删除所有可清理的工作流历史"
           else
-            echo "mode=normal" >> $GITHUB_OUTPUT
-            echo "::notice::ℹ️ 执行标准清理 (保留30天记录)"
+            echo "mode=weekly" >> $GITHUB_OUTPUT
+            echo "::notice::ℹ️ 执行周度清理 (保留7天记录)"
           fi
       
-      # 标准清理模式 (默认)
-      - name: Normal cleanup (30 days)
-        if: steps.mode.outputs.mode == 'normal'
+      # 周度清理模式 (默认)
+      - name: Weekly cleanup (7 days)
+        if: steps.mode.outputs.mode == 'weekly'
         uses: Mattraks/delete-workflow-runs@main
         with:
-          retain_days: 30
-          keep_minimum_runs: 20
+          retain_days: 7
+          keep_minimum_runs: 10
           exclude_workflows: "Workflow Run Cleaner"
           exclude_status: "in_progress,queued"
           debug: true
       
       # 全量清理模式 (手动触发)
       - name: Full cleanup (DELETE ALL)
-        if: steps.mode.outputs.mode == 'aggressive'
+        if: steps.mode.outputs.mode == 'full'
         uses: Mattraks/delete-workflow-runs@main
         with:
           retain_days: 0
@@ -57,8 +55,8 @@ jobs:
       # 完成通知
       - name: Completion notice
         run: |
-          if [ "${{ steps.mode.outputs.mode }}" == "aggressive" ]; then
+          if [ "${{ steps.mode.outputs.mode }}" == "full" ]; then
             echo "::warning::✅ 全量清理完成! 已删除所有可清理的工作流历史"
           else
-            echo "::notice::✅ 标准清理完成! 保留30天内的运行记录"
+            echo "::notice::✅ 周度清理完成! 保留7天内的运行记录"
           fi
