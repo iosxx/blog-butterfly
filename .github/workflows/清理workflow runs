@@ -1,4 +1,4 @@
-name: Workflow Run Cleaner
+name:清理workflow runs
 
 on:
   schedule:
