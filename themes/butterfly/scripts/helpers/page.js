@@ -37,7 +37,7 @@ hexo.extend.helper.register('cloudTags', function (options = {}) {
     const ratio = length ? sizes.indexOf(tag.length) / length : 0
     const size = minfontsize + ((maxfontsize - minfontsize) * ratio)
     const style = generateStyle(size, unit)
-    return `<a href="${env.url_for(tag.path)}" style="${style}">${tag.name}<sup>${tag.length}</sup></a>`
+    return `<a href="${env.url_for(tag.path)}" style="${style}">${tag.name}</a>`
   }).join('')
 
   return result
@@ -81,7 +81,7 @@ hexo.extend.helper.register('findArchivesTitle', function (page, menu, date) {
   return loop(menu) || defaultTitle
 })
 
-hexo.extend.helper.register('getBgPath', path => {
+hexo.extend.helper.register('getBgPath', function(path) {
   if (!path) return ''
 
   const absoluteUrlPattern = /^(?:[a-z][a-z\d+.-]*:)?\/\//i
@@ -91,7 +91,7 @@ hexo.extend.helper.register('getBgPath', path => {
   if (colorPattern.test(path)) {
     return `background-color: ${path};`
   } else if (absoluteUrlPattern.test(path) || relativeUrlPattern.test(path)) {
-    return `background-image: url(${path});`
+    return `background-image: url(${this.url_for(path)});`
   } else {
     return `background: ${path};`
   }
@@ -144,4 +144,9 @@ hexo.extend.helper.register('getPageType', (page, isHome) => {
   }
   if (isHome) return 'home'
   return 'post'
+})
+
+hexo.extend.helper.register('getVersion', () => {
+  const { version } = require('../../package.json')
+  return { hexo: hexo.version, theme: version }
 })
