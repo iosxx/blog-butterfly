@@ -3,7 +3,7 @@ title: 终于完成hexo自动首图封面了
 urlname: zpav84nkg2mwbthp
 date: '2025-07-11 09:09:58'
 updated: '2025-07-11 09:41:25'
-cover: 'https://cdn.nlark.com/yuque/0/2025/jpeg/40683968/1752198072914-087533c9-66fe-4b75-a115-1274f2401748.jpeg'
+
 description: '不理解为什么这么多人用都没有自动首图封面这个功能，百度搜了好久都没见到，最后害得我自己出马，以下是过程，我自己也保存记录位置:/theme/butterfly/scritps/fliter/random_cover.js (其他主题自己找位置)/**  * Random cover for p...'
 ---
 ![](https://cdn.jsdmirror.com/gh/iosxx/blog@posts/img/2cc0f7b1171a85f099dccd8ed84abac7.jpeg)
