@@ -167,3 +167,4 @@ hexo.extend.generator.register('post', locals => {
     }
   })
 })
+
