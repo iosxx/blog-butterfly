@@ -121,16 +121,10 @@ cover:
   archives_enable: true
   # 未设置封面时显示的默认封面
   default_cover:
-  - https://api.ixiaowai.cn/api/api.php
-  - https://acg.toubiec.cn/random.php            
-  - https://www.dmoe.cc/random.php   
-  - https://api.mtyqx.cn/api/random.php
+    - https://www.dmoe.cc/random.php
 # 替换损坏图片
   error_img:
-  - https://api.ixiaowai.cn/api/api.php
-  - https://acg.toubiec.cn/random.php
   - https://www.dmoe.cc/random.php
-  - https://api.mtyqx.cn/api/random.php
   flink:
   post_page:
 
