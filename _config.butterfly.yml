@@ -121,7 +121,7 @@ cover:
   archives_enable: true
   # 未设置封面时显示的默认封面
   default_cover:
-    - https://www.dmoe.cc/random.php
+  - https://www.dmoe.cc/random.php
 # 替换损坏图片
   error_img:
   - https://www.dmoe.cc/random.php
