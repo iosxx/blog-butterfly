@@ -120,13 +120,19 @@ cover:
   aside_enable: true
   archives_enable: true
   # 未设置封面时显示的默认封面
-  default_cover:
+default_cover:
   - https://www.dmoe.cc/random.php
+
 # 替换损坏图片
-  error_img:
+error_img:
   - https://www.dmoe.cc/random.php
-  flink:
-  post_page:
+
+flink:
+post_page:
+
+flink:
+post_page:
+
 
 # 简易404页面
 error_404:
