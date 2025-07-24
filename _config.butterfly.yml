@@ -127,13 +127,6 @@ default_cover:
 error_img:
   - https://www.dmoe.cc/random.php
 
-flink:
-post_page:
-
-flink:
-post_page:
-
-
 # 简易404页面
 error_404:
   enable: true
@@ -841,6 +834,7 @@ umami_analytics:
     page_pv: true
     # Umami云 (API密钥) / 自托管Umami (令牌)
     token: api_ckGpmBKoXeXla5JENFEVVlrKZ47SH9ff
+
 # --------------------------------------
 # 广告设置
 # --------------------------------------
@@ -1258,12 +1252,3 @@ CDN:
 mourn:
   enable: true
   days: [4-5, 5-12, 7-7, 9-18, 12-13]
-
-# AI 摘要
-ai_summary:
-  enable: false
-  postSelector: '#post #article-container'
-  key: 'VCtoijR43E2uiVWkrZiC'
-  postURL: "/^https?://[^/]+/posts/[^/]+/"
-  wordLimit: 1000
-  title: "AI 文章摘要"
